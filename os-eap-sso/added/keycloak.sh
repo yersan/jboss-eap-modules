@@ -192,7 +192,16 @@ function configure_extension() {
   sed -i 's|<!-- ##KEYCLOAK_EXTENSION## -->|<extension module="org.keycloak.keycloak-adapter-subsystem"/><extension module="org.keycloak.keycloak-saml-adapter-subsystem"/>|' "${CONFIG_FILE}"
 }
 
+function configure_extensionCLI() {
+  sed -i 's|<!-- ##KEYCLOAK_EXTENSION## -->|<extension module="org.keycloak.keycloak-adapter-subsystem"/><extension module="org.keycloak.keycloak-saml-adapter-subsystem"/>|' "${CONFIG_FILE}"
+}
+
 function configure_security_domain() {
+  keycloak_security_domain=$(cat "${KEYCLOAK_SECURITY_DOMAIN_FILE}" | sed ':a;N;$!ba;s|\n|\\n|g')
+  sed -i "s|<!-- ##KEYCLOAK_SECURITY_DOMAIN## -->|${keycloak_security_domain%$'\n'}|" "${CONFIG_FILE}"
+}
+
+function configure_security_domainCLI() {
   keycloak_security_domain=$(cat "${KEYCLOAK_SECURITY_DOMAIN_FILE}" | sed ':a;N;$!ba;s|\n|\\n|g')
   sed -i "s|<!-- ##KEYCLOAK_SECURITY_DOMAIN## -->|${keycloak_security_domain%$'\n'}|" "${CONFIG_FILE}"
 }
